@@ -1,4 +1,4 @@
-import { FaStar, FaMapMarkerAlt, FaClock } from 'react-icons/fa'
+import { FaStar, FaUniversity } from 'react-icons/fa'
 import Link from 'next/link'
 
 const banks = [

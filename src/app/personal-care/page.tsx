@@ -1,4 +1,4 @@
-import { FaStar, FaMapMarkerAlt, FaClock, FaCut } from 'react-icons/fa'
+import { FaStar, FaCut } from 'react-icons/fa'
 import Link from 'next/link'
 
 const services = [

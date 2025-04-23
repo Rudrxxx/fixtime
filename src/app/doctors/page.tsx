@@ -1,4 +1,4 @@
-import { FaStar, FaMapMarkerAlt, FaClock, FaStethoscope } from 'react-icons/fa'
+import { FaStar, FaStethoscope } from 'react-icons/fa'
 import Link from 'next/link'
 
 const doctors = [

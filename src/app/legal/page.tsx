@@ -1,4 +1,4 @@
-import { FaStar, FaMapMarkerAlt, FaClock, FaBalanceScale } from 'react-icons/fa'
+import { FaStar, FaBalanceScale } from 'react-icons/fa'
 import Link from 'next/link'
 
 const lawyers = [

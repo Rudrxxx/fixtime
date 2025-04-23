@@ -1,9 +1,10 @@
 'use client'
 
 import Link from 'next/link'
-import { FaStethoscope, FaCut, FaUniversity, FaCalendarAlt, FaBalanceScale, FaStar, FaQuoteLeft } from 'react-icons/fa'
+import { FaStethoscope, FaCut, FaUniversity, FaBalanceScale, FaStar, FaQuoteLeft } from 'react-icons/fa'
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
+import { ReactNode } from 'react'
 
 const services = [
   {
@@ -84,7 +85,7 @@ const testimonials = [
   }
 ]
 
-const AnimatedSection = ({ children, delay = 0 }) => {
+const AnimatedSection = ({ children, delay = 0 }: { children: ReactNode; delay?: number }) => {
   const [ref, inView] = useInView({
     triggerOnce: true,
     threshold: 0.1,
@@ -130,7 +131,7 @@ export default function Home() {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="text-2xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-400 mb-4"
             >
-              SKIP THE QUEUE, BOOK WHAT'S DUE
+              SKIP THE QUEUE, BOOK WHAT&apos;S DUE
             </motion.p>
             <motion.div 
               initial={{ opacity: 0, scale: 0.9 }}

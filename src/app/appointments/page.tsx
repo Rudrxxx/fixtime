@@ -17,8 +17,26 @@ const serviceColors = {
   legal: 'bg-indigo-500'
 }
 
+interface AppointmentType {
+  id: number;
+  service: string;
+  serviceId: string;
+  name: string;
+  email: string;
+  phone: string;
+  reason: string;
+  selectedSlot: string;
+  date: string;
+  status: string;
+  providerInfo: {
+    name: string;
+    type: string;
+    location: string;
+  };
+}
+
 export default function AppointmentsPage() {
-  const [appointments, setAppointments] = useState<any[]>([])
+  const [appointments, setAppointments] = useState<AppointmentType[]>([])
 
   useEffect(() => {
     const storedAppointments = JSON.parse(localStorage.getItem('appointments') || '[]')
