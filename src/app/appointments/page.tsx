@@ -26,6 +26,7 @@ interface AppointmentType {
   phone: string;
   reason: string;
   selectedSlot: string;
+  appointmentDate?: string; // For backward compatibility
   date: string;
   status: string;
   providerInfo: {
@@ -51,6 +52,21 @@ export default function AppointmentsPage() {
       alert('Appointment cancelled successfully!')
     }
   }
+
+  // Format date for display
+  const formatAppointmentDate = (appointment: AppointmentType) => {
+    // For backward compatibility
+    if (!appointment.appointmentDate) {
+      return 'Today';
+    }
+
+    const date = new Date(appointment.appointmentDate);
+    return date.toLocaleDateString('en-US', { 
+      weekday: 'short', 
+      month: 'short', 
+      day: 'numeric' 
+    });
+  };
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -91,9 +107,15 @@ export default function AppointmentsPage() {
                 </div>
               </div>
               <div className="p-6">
-                <div className="flex items-center text-gray-600 mb-4">
-                  <FaClock className="mr-2" />
-                  <span>{appointment.selectedSlot}</span>
+                <div className="flex items-center justify-between text-gray-600 mb-4">
+                  <div className="flex items-center">
+                    <FaClock className="mr-2" />
+                    <span>{appointment.selectedSlot}</span>
+                  </div>
+                  <div className="flex items-center">
+                    <FaCalendarAlt className="mr-2" />
+                    <span>{formatAppointmentDate(appointment)}</span>
+                  </div>
                 </div>
                 <div className="space-y-2">
                   <p className="text-gray-700">

@@ -1,8 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useParams } from 'next/navigation'
+import { FaCalendarAlt } from 'react-icons/fa'
 
 const doctorData = {
   '1': { name: 'Dr. Sarah Johnson', location: 'Ruby Hall Clinic, Pune' },
@@ -18,6 +19,7 @@ export default function BookAppointment() {
   const params = useParams()
   const id = params.id as string
 
+  const [selectedDate, setSelectedDate] = useState<string>('')
   const [selectedSlot, setSelectedSlot] = useState('')
   const [formData, setFormData] = useState({
     name: '',
@@ -25,13 +27,80 @@ export default function BookAppointment() {
     phone: '',
     reason: ''
   })
+  const [currentDateTime, setCurrentDateTime] = useState<Date>(new Date())
 
-  const timeSlots = [
-    '9:00 AM', '10:30 AM', '2:00 PM', '3:30 PM'
+  // List of available time slots
+  const allTimeSlots = [
+    '8:00 AM', '9:00 AM', '10:00 AM', '10:30 AM', '11:30 AM',
+    '1:00 PM', '2:00 PM', '2:30 PM', '3:30 PM', '4:30 PM', '5:30 PM'
   ]
+
+  // Update current time every minute
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCurrentDateTime(new Date());
+    }, 60000);
+
+    return () => clearInterval(intervalId);
+  }, []);
+
+  // Generate the next 7 days for date selection
+  const getNextSevenDays = () => {
+    const dates = [];
+    const today = new Date();
+    
+    for (let i = 0; i < 7; i++) {
+      const date = new Date(today);
+      date.setDate(today.getDate() + i);
+      dates.push({
+        value: date.toISOString().split('T')[0],
+        label: date.toLocaleDateString('en-US', { 
+          weekday: 'short', 
+          month: 'short', 
+          day: 'numeric' 
+        })
+      });
+    }
+    
+    return dates;
+  };
+
+  // Check if a time slot is in the past
+  const isTimeSlotPast = (timeSlot: string) => {
+    if (!selectedDate) return true;
+    
+    const today = new Date().toISOString().split('T')[0];
+    if (selectedDate > today) return false;
+    if (selectedDate < today) return true;
+    
+    // If selected date is today, check the time
+    const [time, period] = timeSlot.split(' ');
+    const [hour, minute] = time.split(':').map(Number);
+    
+    let timeSlotHour = hour;
+    if (period === 'PM' && hour !== 12) timeSlotHour += 12;
+    if (period === 'AM' && hour === 12) timeSlotHour = 0;
+    
+    const now = new Date();
+    if (timeSlotHour < now.getHours()) return true;
+    if (timeSlotHour === now.getHours() && minute <= now.getMinutes()) return true;
+    
+    return false;
+  };
+
+  // Initialize with today's date when component mounts
+  useEffect(() => {
+    const today = new Date().toISOString().split('T')[0];
+    setSelectedDate(today);
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+    
+    if (!selectedDate || !selectedSlot) {
+      alert('Please select a date and time slot');
+      return;
+    }
     
     // Get existing appointments from localStorage
     const existingAppointments = JSON.parse(localStorage.getItem('appointments') || '[]')
@@ -54,6 +123,7 @@ export default function BookAppointment() {
       phone: formData.phone,
       reason: formData.reason,
       selectedSlot,
+      appointmentDate: selectedDate,
       date: new Date().toISOString(),
       status: 'upcoming',
       providerInfo: {
@@ -85,24 +155,53 @@ export default function BookAppointment() {
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
+            <label className="block text-gray-700 font-medium mb-2 flex items-center">
+              <FaCalendarAlt className="mr-2" /> 
+              Select Date
+            </label>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 mb-6">
+              {getNextSevenDays().map(date => (
+                <button
+                  key={date.value}
+                  type="button"
+                  onClick={() => setSelectedDate(date.value)}
+                  className={`p-2 rounded-lg border-2 transition-colors font-medium ${
+                    selectedDate === date.value
+                      ? 'border-blue-500 bg-blue-50 text-blue-600'
+                      : 'border-gray-200 text-gray-900 hover:border-blue-300'
+                  }`}
+                >
+                  {date.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div>
             <label className="block text-gray-700 font-medium mb-2">
               Select Time Slot
             </label>
-            <div className="grid grid-cols-2 gap-4">
-              {timeSlots.map((slot) => (
-                <button
-                  key={slot}
-                  type="button"
-                  onClick={() => setSelectedSlot(slot)}
-                  className={`p-3 rounded-lg border-2 transition-colors ${
-                    selectedSlot === slot
-                      ? 'border-blue-500 bg-blue-50 text-blue-600'
-                      : 'border-gray-200 hover:border-blue-300'
-                  }`}
-                >
-                  {slot}
-                </button>
-              ))}
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+              {allTimeSlots.map((slot) => {
+                const isPast = isTimeSlotPast(slot);
+                return (
+                  <button
+                    key={slot}
+                    type="button"
+                    disabled={isPast}
+                    onClick={() => setSelectedSlot(slot)}
+                    className={`p-3 rounded-lg border-2 transition-colors font-medium ${
+                      selectedSlot === slot
+                        ? 'border-blue-500 bg-blue-50 text-blue-600'
+                        : isPast
+                          ? 'border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed'
+                          : 'border-gray-200 text-gray-900 hover:border-blue-300'
+                    }`}
+                  >
+                    {slot}
+                  </button>
+                );
+              })}
             </div>
           </div>
 
@@ -115,7 +214,7 @@ export default function BookAppointment() {
               type="text"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
               required
             />
           </div>
@@ -129,7 +228,7 @@ export default function BookAppointment() {
               type="email"
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
               required
             />
           </div>
@@ -143,7 +242,7 @@ export default function BookAppointment() {
               type="tel"
               value={formData.phone}
               onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-              className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
               required
             />
           </div>
@@ -156,7 +255,7 @@ export default function BookAppointment() {
               id="reason"
               value={formData.reason}
               onChange={(e) => setFormData({ ...formData, reason: e.target.value })}
-              className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
               rows={3}
               required
             />
