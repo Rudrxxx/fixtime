@@ -81,9 +81,8 @@ export default function BookAppointment() {
     if (period === 'PM' && hour !== 12) timeSlotHour += 12;
     if (period === 'AM' && hour === 12) timeSlotHour = 0;
     
-    const now = new Date();
-    if (timeSlotHour < now.getHours()) return true;
-    if (timeSlotHour === now.getHours() && minute <= now.getMinutes()) return true;
+    if (timeSlotHour < currentDateTime.getHours()) return true;
+    if (timeSlotHour === currentDateTime.getHours() && minute <= currentDateTime.getMinutes()) return true;
     
     return false;
   };
