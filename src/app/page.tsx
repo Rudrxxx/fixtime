@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { FaStethoscope, FaCut, FaUniversity, FaBalanceScale, FaStar, FaQuoteLeft } from 'react-icons/fa'
+import { FaStethoscope, FaCut, FaUniversity, FaBalanceScale, FaStar, FaQuoteLeft, FaClock, FaUserCheck, FaBell, FaGrinBeam, FaRocket, FaMagic } from 'react-icons/fa'
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import { ReactNode } from 'react'
@@ -65,22 +65,49 @@ const testimonials = [
   {
     name: 'Rahul Sharma',
     role: 'Business Owner',
-    image: '/testimonials/user1.jpg',
+    initials: 'RS',
+    bgColor: 'bg-blue-600',
     text: 'FixTime has revolutionized how I manage my business appointments. The platform is intuitive and saves me hours every week.',
     rating: 5
   },
   {
     name: 'Priya Patel',
     role: 'Working Professional',
-    image: '/testimonials/user2.jpg',
+    initials: 'PP',
+    bgColor: 'bg-pink-600',
     text: 'I love how easy it is to book appointments with my doctor. No more waiting in long queues!',
     rating: 5
   },
   {
     name: 'Amit Desai',
     role: 'Student',
-    image: '/testimonials/user3.jpg',
+    initials: 'AD',
+    bgColor: 'bg-purple-600',
     text: 'The best part about FixTime is the variety of services available. From doctors to legal consultants, everything is just a click away.',
+    rating: 4
+  },
+  {
+    name: 'Neha Kapoor',
+    role: 'Healthcare Professional',
+    initials: 'NK',
+    bgColor: 'bg-green-600',
+    text: 'As a healthcare professional, I appreciate how FixTime helps organize my schedule. My patients love the easy booking system too!',
+    rating: 5
+  },
+  {
+    name: 'Vikram Singh',
+    role: 'Bank Manager',
+    initials: 'VS',
+    bgColor: 'bg-yellow-600',
+    text: 'Our bank has seen 40% improvement in customer satisfaction since we started using FixTime for scheduling appointments.',
+    rating: 5
+  },
+  {
+    name: 'Meera Joshi',
+    role: 'Lawyer',
+    initials: 'MJ',
+    bgColor: 'bg-indigo-600',
+    text: 'Managing client consultations used to be a nightmare. FixTime has streamlined my practice and helped me focus on what matters - my clients.',
     rating: 4
   }
 ]
@@ -190,20 +217,45 @@ export default function Home() {
         {/* Features Section */}
         <AnimatedSection delay={0.4}>
           <div className="mb-16">
-            <h2 className="text-3xl font-bold text-center mb-8 text-white">Why Choose FixTime?</h2>
+            <h2 className="text-3xl font-bold text-center mb-2 text-white">Why Choose FixTime?</h2>
+            <p className="text-xl text-center text-purple-300 italic mb-10">&quot;Why stand in line when you can FixTime?&quot;</p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {[
                 {
-                  title: 'Instant Booking',
-                  description: 'Book appointments in seconds with our intuitive interface'
+                  title: 'Your Personal Assistant',
+                  icon: <FaMagic className="w-8 h-8 text-purple-400 mb-3" />,
+                  description: 'FixTime is like having a PA in your pocket. Book appointments anytime, anywhere without a single phone call.',
+                  quote: 'Time saved is time earned!'
                 },
                 {
-                  title: 'Verified Providers',
-                  description: 'All service providers are verified and rated by users'
+                  title: 'Skip The Queue',
+                  icon: <FaRocket className="w-8 h-8 text-blue-400 mb-3" />,
+                  description: 'No more standing in lines or waiting on hold. Join the digital revolution and reclaim your precious time.',
+                  quote: 'Life is too short to wait in queues!'
                 },
                 {
                   title: 'Smart Reminders',
-                  description: 'Never miss an appointment with our smart notification system'
+                  icon: <FaBell className="w-8 h-8 text-pink-400 mb-3" />,
+                  description: 'Never miss an appointment with our smart notification system that keeps you on track.',
+                  quote: 'Stay organized, stay ahead!'
+                },
+                {
+                  title: 'Verified Providers',
+                  icon: <FaUserCheck className="w-8 h-8 text-green-400 mb-3" />,
+                  description: 'All service providers are verified and rated by real users for your peace of mind.',
+                  quote: 'Quality service, guaranteed!'
+                },
+                {
+                  title: 'Real-Time Availability',
+                  icon: <FaClock className="w-8 h-8 text-yellow-400 mb-3" />,
+                  description: 'See real-time availability and book slots that work perfectly with your schedule.',
+                  quote: 'The right time is your time!'
+                },
+                {
+                  title: 'Happiness Guarantee',
+                  icon: <FaGrinBeam className="w-8 h-8 text-orange-400 mb-3" />,
+                  description: 'We&apos;re committed to your satisfaction with every booking you make through our platform.',
+                  quote: 'Happiness is just a booking away!'
                 }
               ].map((feature, index) => (
                 <motion.div
@@ -214,8 +266,12 @@ export default function Home() {
                   whileHover={{ scale: 1.05 }}
                   className="p-6 bg-white/10 backdrop-blur-sm rounded-xl shadow-lg"
                 >
-                  <h3 className="text-xl font-semibold mb-2 text-white">{feature.title}</h3>
-                  <p className="text-gray-300">{feature.description}</p>
+                  <div className="flex flex-col items-center text-center">
+                    {feature.icon}
+                    <h3 className="text-xl font-semibold mb-2 text-white">{feature.title}</h3>
+                    <p className="text-gray-300 mb-3">{feature.description}</p>
+                    <p className="text-sm italic text-cyan-300 mt-2">&quot;{feature.quote}&quot;</p>
+                  </div>
                 </motion.div>
               ))}
             </div>
@@ -226,7 +282,7 @@ export default function Home() {
         <AnimatedSection delay={0.6}>
           <div className="mb-16">
             <h2 className="text-3xl font-bold text-center mb-8 text-white">What Our Users Say</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {testimonials.map((testimonial, index) => (
                 <motion.div
                   key={index}
@@ -237,7 +293,9 @@ export default function Home() {
                   className="bg-white/10 backdrop-blur-sm rounded-xl shadow-lg p-6"
                 >
                   <div className="flex items-center mb-4">
-                    <div className="w-12 h-12 bg-gray-200 rounded-full mr-4"></div>
+                    <div className={`w-12 h-12 ${testimonial.bgColor} rounded-full mr-4 flex items-center justify-center text-white font-bold`}>
+                      {testimonial.initials}
+                    </div>
                     <div>
                       <h3 className="font-semibold text-white">{testimonial.name}</h3>
                       <p className="text-gray-400 text-sm">{testimonial.role}</p>
