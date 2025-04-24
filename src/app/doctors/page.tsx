@@ -66,18 +66,24 @@ const doctors = [
 
 export default function DoctorsPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50">
-      <div className="container mx-auto px-4 py-8">
+    <div className="min-h-screen bg-white">
+      {/* Subtle Background */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.05),rgba(255,255,255,0))]"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(216,180,254,0.05),rgba(255,255,255,0))]"></div>
+      </div>
+
+      <div className="relative container mx-auto px-4 py-8">
         <h1 className="text-4xl font-bold text-center mb-8 text-gray-800">Find a Doctor</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {doctors.map((doctor) => (
             <Link
               key={doctor.id}
               href={`/doctors/${doctor.id}/book`}
-              className="group relative overflow-hidden rounded-2xl shadow-lg transform transition-all duration-300 hover:scale-105 bg-white"
+              className="group relative overflow-hidden rounded-2xl shadow-md border border-gray-100 transform transition-all duration-300 hover:scale-105 bg-white"
             >
               <div className="relative h-48">
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-cyan-500 opacity-90" />
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-blue-600 opacity-90" />
                 <div className="absolute inset-0 flex items-center justify-center">
                   <FaStethoscope className="w-12 h-12 text-white" />
                 </div>
@@ -86,7 +92,7 @@ export default function DoctorsPage() {
                 <h2 className="text-2xl font-bold mb-2 text-gray-800">{doctor.name}</h2>
                 <p className="text-gray-600 mb-2">{doctor.specialty}</p>
                 <div className="flex items-center mb-2">
-                  <FaStar className="text-yellow-400 mr-1" />
+                  <FaStar className="text-yellow-500 mr-1" />
                   <span className="text-gray-700">{doctor.rating} ({doctor.reviews} reviews)</span>
                 </div>
                 <p className="text-gray-600">{doctor.location}</p>

@@ -193,127 +193,135 @@ export default function BookAppointment() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-2xl">
-      <div className="bg-white rounded-xl shadow-lg p-8">
-        <h1 className={`text-3xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r ${serviceData[service as keyof typeof serviceData].color}`}>
-          Book Your {serviceData[service as keyof typeof serviceData].title} Appointment
-        </h1>
+    <div className="min-h-screen bg-white">
+      {/* Subtle Background */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.05),rgba(255,255,255,0))]"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(216,180,254,0.05),rgba(255,255,255,0))]"></div>
+      </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label className="block text-gray-700 font-medium mb-2 flex items-center">
-              <FaCalendarAlt className="mr-2" /> 
-              Select Date
-            </label>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 mb-6">
-              {getNextSevenDays().map(date => (
-                <button
-                  key={date.value}
-                  type="button"
-                  onClick={() => setSelectedDate(date.value)}
-                  className={`p-2 rounded-lg border-2 transition-colors font-medium ${
-                    selectedDate === date.value
-                      ? 'border-blue-500 bg-blue-50 text-blue-600'
-                      : 'border-gray-200 text-gray-900 hover:border-blue-300'
-                  }`}
-                >
-                  {date.label}
-                </button>
-              ))}
-            </div>
-          </div>
+      <div className="relative container mx-auto px-4 py-8 max-w-2xl">
+        <div className="bg-white rounded-xl shadow-md border border-gray-100 p-8">
+          <h1 className={`text-3xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r ${serviceData[service as keyof typeof serviceData].color}`}>
+            Book Your {serviceData[service as keyof typeof serviceData].title} Appointment
+          </h1>
 
-          <div>
-            <label className="block text-gray-700 font-medium mb-2">
-              Select Time Slot
-            </label>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-              {allTimeSlots.map((slot) => {
-                const isPast = isTimeSlotPast(slot);
-                return (
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <label className="block text-gray-700 font-medium mb-2 flex items-center">
+                <FaCalendarAlt className="mr-2" /> 
+                Select Date
+              </label>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 mb-6">
+                {getNextSevenDays().map(date => (
                   <button
-                    key={slot}
+                    key={date.value}
                     type="button"
-                    disabled={isPast}
-                    onClick={() => setSelectedSlot(slot)}
-                    className={`p-3 rounded-lg border-2 transition-colors font-medium ${
-                      selectedSlot === slot
+                    onClick={() => setSelectedDate(date.value)}
+                    className={`p-2 rounded-lg border-2 transition-colors font-medium ${
+                      selectedDate === date.value
                         ? 'border-blue-500 bg-blue-50 text-blue-600'
-                        : isPast
-                          ? 'border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed'
-                          : 'border-gray-200 text-gray-900 hover:border-blue-300'
+                        : 'border-gray-200 text-gray-900 hover:border-blue-300'
                     }`}
                   >
-                    {slot}
+                    {date.label}
                   </button>
-                );
-              })}
+                ))}
+              </div>
             </div>
-          </div>
 
-          <div>
-            <label htmlFor="name" className="block text-gray-700 font-medium mb-2">
-              Your Full Name
-            </label>
-            <input
-              id="name"
-              type="text"
-              value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
-              required
-            />
-          </div>
+            <div>
+              <label className="block text-gray-700 font-medium mb-2">
+                Select Time Slot
+              </label>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                {allTimeSlots.map((slot) => {
+                  const isPast = isTimeSlotPast(slot);
+                  return (
+                    <button
+                      key={slot}
+                      type="button"
+                      disabled={isPast}
+                      onClick={() => setSelectedSlot(slot)}
+                      className={`p-3 rounded-lg border-2 transition-colors font-medium ${
+                        selectedSlot === slot
+                          ? 'border-blue-500 bg-blue-50 text-blue-600'
+                          : isPast
+                            ? 'border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed'
+                            : 'border-gray-200 text-gray-900 hover:border-blue-300'
+                      }`}
+                    >
+                      {slot}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
 
-          <div>
-            <label htmlFor="email" className="block text-gray-700 font-medium mb-2">
-              Email Address
-            </label>
-            <input
-              id="email"
-              type="email"
-              value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
-              required
-            />
-          </div>
+            <div>
+              <label htmlFor="name" className="block text-gray-700 font-medium mb-2">
+                Your Full Name
+              </label>
+              <input
+                id="name"
+                type="text"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+                required
+              />
+            </div>
 
-          <div>
-            <label htmlFor="phone" className="block text-gray-700 font-medium mb-2">
-              Phone Number
-            </label>
-            <input
-              id="phone"
-              type="tel"
-              value={formData.phone}
-              onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-              className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
-              required
-            />
-          </div>
+            <div>
+              <label htmlFor="email" className="block text-gray-700 font-medium mb-2">
+                Email Address
+              </label>
+              <input
+                id="email"
+                type="email"
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+                required
+              />
+            </div>
 
-          <div>
-            <label htmlFor="reason" className="block text-gray-700 font-medium mb-2">
-              Reason for Visit
-            </label>
-            <textarea
-              id="reason"
-              value={formData.reason}
-              onChange={(e) => setFormData({ ...formData, reason: e.target.value })}
-              className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
-              rows={3}
-              required
-            />
-          </div>
+            <div>
+              <label htmlFor="phone" className="block text-gray-700 font-medium mb-2">
+                Phone Number
+              </label>
+              <input
+                id="phone"
+                type="tel"
+                value={formData.phone}
+                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+                required
+              />
+            </div>
 
-          <button
-            type="submit"
-            className={`w-full bg-gradient-to-r ${serviceData[service as keyof typeof serviceData].buttonColor} text-white py-3 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-colors`}
-          >
-            Confirm Appointment
-          </button>
-        </form>
+            <div>
+              <label htmlFor="reason" className="block text-gray-700 font-medium mb-2">
+                Reason for Visit
+              </label>
+              <textarea
+                id="reason"
+                value={formData.reason}
+                onChange={(e) => setFormData({ ...formData, reason: e.target.value })}
+                className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+                rows={3}
+                required
+              />
+            </div>
+
+            <button
+              type="submit"
+              className={`w-full bg-gradient-to-r ${serviceData[service as keyof typeof serviceData].buttonColor} text-white py-3 rounded-lg hover:opacity-90 transition-colors`}
+            >
+              Confirm Appointment
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   )

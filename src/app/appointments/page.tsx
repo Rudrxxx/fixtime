@@ -69,86 +69,94 @@ export default function AppointmentsPage() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex items-center justify-between mb-8">
-        <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-pink-600">
-          My Appointments
-        </h1>
-        <div className="flex items-center space-x-2 text-gray-600">
-          <FaCalendarAlt className="w-6 h-6" />
-          <span className="text-lg font-semibold">{appointments.length} Appointments</span>
-        </div>
+    <div className="min-h-screen bg-white">
+      {/* Subtle Background */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.05),rgba(255,255,255,0))]"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(216,180,254,0.05),rgba(255,255,255,0))]"></div>
       </div>
 
-      {appointments.length === 0 ? (
-        <div className="text-center py-12">
-          <FaCalendarAlt className="w-16 h-16 mx-auto text-gray-400 mb-4" />
-          <h2 className="text-2xl font-semibold text-gray-700 mb-2">No Appointments Yet</h2>
-          <p className="text-gray-500">Book your first appointment to get started!</p>
+      <div className="relative container mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">
+            My Appointments
+          </h1>
+          <div className="flex items-center space-x-2 text-gray-600">
+            <FaCalendarAlt className="w-6 h-6" />
+            <span className="text-lg font-semibold">{appointments.length} Appointments</span>
+          </div>
         </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {appointments.map((appointment) => (
-            <div
-              key={appointment.id}
-              className="bg-white rounded-xl shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-105"
-            >
-              <div className={`p-4 ${serviceColors[appointment.service as keyof typeof serviceColors]} text-white`}>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    {serviceIcons[appointment.service as keyof typeof serviceIcons]}
-                    <span className="text-lg font-semibold capitalize">
-                      {appointment.service.replace('-', ' ')}
+
+        {appointments.length === 0 ? (
+          <div className="text-center py-12 bg-white rounded-xl shadow-md border border-gray-100 p-8">
+            <FaCalendarAlt className="w-16 h-16 mx-auto text-gray-400 mb-4" />
+            <h2 className="text-2xl font-semibold text-gray-700 mb-2">No Appointments Yet</h2>
+            <p className="text-gray-500">Book your first appointment to get started!</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {appointments.map((appointment) => (
+              <div
+                key={appointment.id}
+                className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden transform transition-all duration-300 hover:scale-105"
+              >
+                <div className={`p-4 ${serviceColors[appointment.service as keyof typeof serviceColors]} text-white`}>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      {serviceIcons[appointment.service as keyof typeof serviceIcons]}
+                      <span className="text-lg font-semibold capitalize">
+                        {appointment.service.replace('-', ' ')}
+                      </span>
+                    </div>
+                    <span className="text-sm bg-white bg-opacity-20 px-2 py-1 rounded-full">
+                      {appointment.status}
                     </span>
                   </div>
-                  <span className="text-sm bg-white bg-opacity-20 px-2 py-1 rounded-full">
-                    {appointment.status}
-                  </span>
+                </div>
+                <div className="p-6">
+                  <div className="flex items-center justify-between text-gray-600 mb-4">
+                    <div className="flex items-center">
+                      <FaClock className="mr-2" />
+                      <span>{appointment.selectedSlot}</span>
+                    </div>
+                    <div className="flex items-center">
+                      <FaCalendarAlt className="mr-2" />
+                      <span>{formatAppointmentDate(appointment)}</span>
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <p className="text-gray-700">
+                      <span className="font-semibold">Provider:</span> {appointment.providerInfo.name}
+                    </p>
+                    <p className="text-gray-700">
+                      <span className="font-semibold">Type:</span> {appointment.providerInfo.type}
+                    </p>
+                    <p className="text-gray-700">
+                      <span className="font-semibold">Location:</span> {appointment.providerInfo.location}
+                    </p>
+                    <p className="text-gray-700">
+                      <span className="font-semibold">Your Name:</span> {appointment.name}
+                    </p>
+                    <p className="text-gray-700">
+                      <span className="font-semibold">Phone:</span> {appointment.phone}
+                    </p>
+                    <p className="text-gray-700">
+                      <span className="font-semibold">Reason:</span> {appointment.reason}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => handleCancel(appointment.id)}
+                    className="mt-4 w-full flex items-center justify-center space-x-2 bg-red-100 text-red-600 py-2 rounded-lg hover:bg-red-200 transition-colors"
+                  >
+                    <FaTrash className="w-4 h-4" />
+                    <span>Cancel Appointment</span>
+                  </button>
                 </div>
               </div>
-              <div className="p-6">
-                <div className="flex items-center justify-between text-gray-600 mb-4">
-                  <div className="flex items-center">
-                    <FaClock className="mr-2" />
-                    <span>{appointment.selectedSlot}</span>
-                  </div>
-                  <div className="flex items-center">
-                    <FaCalendarAlt className="mr-2" />
-                    <span>{formatAppointmentDate(appointment)}</span>
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <p className="text-gray-700">
-                    <span className="font-semibold">Provider:</span> {appointment.providerInfo.name}
-                  </p>
-                  <p className="text-gray-700">
-                    <span className="font-semibold">Type:</span> {appointment.providerInfo.type}
-                  </p>
-                  <p className="text-gray-700">
-                    <span className="font-semibold">Location:</span> {appointment.providerInfo.location}
-                  </p>
-                  <p className="text-gray-700">
-                    <span className="font-semibold">Your Name:</span> {appointment.name}
-                  </p>
-                  <p className="text-gray-700">
-                    <span className="font-semibold">Phone:</span> {appointment.phone}
-                  </p>
-                  <p className="text-gray-700">
-                    <span className="font-semibold">Reason:</span> {appointment.reason}
-                  </p>
-                </div>
-                <button
-                  onClick={() => handleCancel(appointment.id)}
-                  className="mt-4 w-full flex items-center justify-center space-x-2 bg-red-100 text-red-600 py-2 rounded-lg hover:bg-red-200 transition-colors"
-                >
-                  <FaTrash className="w-4 h-4" />
-                  <span>Cancel Appointment</span>
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   )
 } 
