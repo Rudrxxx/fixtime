@@ -5,6 +5,7 @@ import { FaStethoscope, FaCut, FaUniversity, FaBalanceScale, FaStar, FaQuoteLeft
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import { ReactNode, useState, useEffect } from 'react'
+import Image from 'next/image'
 
 const services = [
   {
@@ -206,14 +207,16 @@ export default function Home() {
               {slideImages.map((imgSrc, index) => (
                 <div 
                   key={index}
-                  className={`absolute inset-0 transition-all duration-1000 ease-in-out flex items-center justify-center ${currentSlide === index ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
+                  className={`absolute inset-0 transition-all duration-1000 ease-in-out ${currentSlide === index ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
                 >
-                  {/* Image wrapper with fill and fixed aspect ratio to prevent cutting */}
-                  <div className="relative w-full h-full">
-                    <img
+                  {/* Image with object-contain to prevent cutting */}
+                  <div className="absolute inset-0">
+                    <Image
                       src={imgSrc}
                       alt={`Queue image ${index}`}
-                      className="absolute inset-0 w-full h-full object-contain"
+                      fill
+                      style={{objectFit: 'contain'}}
+                      priority={index < 2}
                     />
                   </div>
                   

@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
 export default function DebugPage() {
   const [loadState, setLoadState] = useState<{[key: string]: boolean}>({});
@@ -21,7 +21,7 @@ export default function DebugPage() {
     }));
   };
 
-  const handleImageError = (src: string, error: any) => {
+  const handleImageError = (src: string, error: Error | string) => {
     console.error(`Error loading image ${src}:`, error);
     setLoadState(prev => ({
       ...prev,
@@ -51,7 +51,7 @@ export default function DebugPage() {
                 fill
                 style={{objectFit: 'contain'}}
                 onLoad={() => handleImageLoad(src)}
-                onError={(e) => handleImageError(src, e)}
+                onError={(e) => handleImageError(src, e.toString())}
               />
             </div>
           </div>
@@ -64,9 +64,11 @@ export default function DebugPage() {
           {slideImages.map((src, index) => (
             <div key={index}>
               <p className="mb-1">Image {index + 1}:</p>
-              <img 
+              <Image 
                 src={src} 
                 alt={`Direct Image ${index + 1}`} 
+                width={300}
+                height={200}
                 className="w-full h-auto"
               />
             </div>
