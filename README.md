@@ -31,16 +31,12 @@ Built for procrastinators who finally decided enough is enough. 💅
 
 - ⚛️ **Next.js 15.3.1**
 - 🌀 **Tailwind CSS** – Because why write CSS from scratch?
+- 🪄 **React** - Component-based productivity sauce
 - 🧙‍♂️ **TypeScript** – For catching bugs before they catch you
 - 🚀 **Vercel** – Instant deployments, baby!
 
 ---
 
-## 📸 Peek the UI
-
-> _Drop in a screenshot here if you wanna flex your design chops_
-
----
 
 ## ⚙️ Get It Running (aka How to Join the Cool Club)
 
